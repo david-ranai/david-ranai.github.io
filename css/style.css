@@ -1,306 +1,121 @@
-/* ── RESET & BASE ───────────────────────────────────────────────────────── */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-html {
-  scroll-behavior: smooth;
-}
-body {
-  font-family: "Roboto", sans-serif;
-  background: #1E1E1E; /* Dark PCB-like background */
-  color: #F5F5F5;
-}
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-/* ── NAVBAR (optional) ────────────────────────────────────────────────────── */
-.navbar {
-  position: fixed;
-  top: 0;
+/* ── 1. UNIVERSE / STARFIELD BACKGROUND ───────────────────────────────── */
+/* Make #universe fill the viewport minus navbar height */
+#universe {
+  position: absolute;
+  top: 60px;           /* match your navbar height */
   left: 0;
   width: 100%;
-  background: #2E2E2E;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 2rem;
-  z-index: 50;
-}
-.navbar .logo {
-  font-family: "Press Start 2P", cursive;
-  color: #FFE255; /* Pikachu yellow */
-  font-size: 1rem;
-}
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 1.5rem;
-}
-.nav-links a {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #F5F5F5;
-  transition: color 0.2s;
-}
-.nav-links a:hover {
-  color: #FFE255;
-}
-
-/* ── LAYOUT WRAPPER ───────────────────────────────────────────────────────── */
-.wrapper {
-  display: flex;
-  margin-top: 60px; /* leave room for navbar */
-  height: calc(100vh - 60px);
+  bottom: 0;
   overflow: hidden;
+  background: #000 url('https://i.imgur.com/9kG7Q3h.png') center/cover no-repeat;
+  /* That URL is a placeholder starfield; replace with your own darker/HD SVG if desired */
 }
 
-/* ── EE DEX GRID (LEFT) ──────────────────────────────────────────────────── */
-.ee-dex-grid {
-  width: 60%;
-  background: #2C2C2C;
-  padding: 1rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  overflow-y: auto;
-  justify-content: center;
-}
+/* Parallax layers (optional): you can add multiple backgrounds to #universe, e.g.: */
+/*
+background:
+  url('images/nebula.png') center/cover no-repeat,
+  url('images/stars.png') center/cover no-repeat,
+  #000;
+background-attachment: fixed, scroll, scroll;
+*/
 
-/* Make it scrollable if content overflows */
-.ee-dex-grid::-webkit-scrollbar {
-  width: 6px;
-}
-.ee-dex-grid::-webkit-scrollbar-thumb {
-  background: #555;
-  border-radius: 3px;
-}
 
-/* ── POKÉ BALL CARD │ CLOSED STATE ───────────────────────────────────────── */
-.project-card {
-  position: relative;
-  width: 150px;
-  height: 150px;
-  cursor: pointer;
-  perspective: 600px; /* for 3D pop if you want */
-}
 
-.pokeball {
+
+/* ── 2. PLANET POSITIONING ───────────────────────────────────────────────── */
+/*
+  .planet elements are positioned in #universe based on data-x/data-y.
+  We’ll override their inline CSS via JS after loading to place them.
+*/
+.planet {
   position: absolute;
-  top: 0;
-  left: 0;
+  width: 100px;   /* planet size (100px × 100px) */
+  height: 100px;
+  transform: translate(-50%, -50%); /* center at the coordinate */
+  z-index: 10;
+}
+
+/* Inside each .planet, your .project-card styling remains as before */
+.ee-dex-grid {
+  position: relative; /* not used for layout—.planet absolute overrides */
   width: 100%;
   height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 0 8px rgba(255, 230, 85, 0.5); /* yellow glow */
-  transition: transform 0.2s ease;
-  z-index: 2;
 }
 
-/* Top half of Poké Ball (red) */
-.pokeball-top {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: #E3350D; /* Poké Ball red */
-  border-bottom: 4px solid #000; /* Black stripe */
-  transition: transform 0.4s ease;
-  transform-origin: bottom center;
-}
 
-/* Bottom half (white) */
-.pokeball-bottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: #FFF;
-  border-top: 4px solid #000; /* Black stripe */
-}
 
-/* Center button ring */
-.pokeball-center {
+/* ── 3. ROCKET (cursor follower) ─────────────────────────────────────────── */
+#rocket {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 28%;
-  height: 28%;
-  background: #FFF;
-  border: 4px solid #000;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 3;
+  width: 60px;            /* adjust rocket size */
+  pointer-events: none;   /* let clicks pass through */
+  transform: translate(-50%, -50%) rotate(0deg);
+  transition: transform 0.1s ease-out;
+  z-index: 50;
 }
 
-/* ── THUMBNAIL UNDERNEATH (hidden by default) ─────────────────────────────── */
-.project-thumb {
+
+/* ── 4. DEBRIS (floating, rotating bits) ────────────────────────────────── */
+.debris {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  opacity: 0;
-  transition: opacity 0.3s ease 0.2s; /* fade in after ball slides */
+  width: 40px;                /* debris size */
+  height: 40px;
+  background: url('images/debris.png') center/cover no-repeat;
+  pointer-events: none;       /* don’t block clicks */
+  opacity: 0.8;
+  z-index: 5;
+  /* We will set top/left with JS, but animate rotation & drift in CSS: */
+  animation: drift linear infinite, spin linear infinite;
+}
+/* Keyframes for drifting downward slowly */
+@keyframes drift {
+  from { transform: translateY(0px); }
+  to   { transform: translateY(200px); }
+}
+/* Keyframes for constant rotation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
-.project-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.7);
-}
+/* We’ll override each .debris’s animation-duration and rotation direction via inline CSS or JS: */
+/*
+  e.g. style="animation-duration: 8s, 5s; animation-direction: normal, reverse;"
+  for drift speed & spin speed
+*/
 
-/* ── HOVER → “OPEN” THE POKÉ BALL ─────────────────────────────────────────── */
-.project-card:hover .pokeball-top {
-  transform: translateY(-100%); /* slide top half up */
-}
-.project-card:hover .project-thumb {
-  opacity: 1; /* reveal the thumbnail */
-}
 
-/* Slight scale-up on hover */
-.project-card:hover .pokeball {
-  transform: scale(1.05);
-}
-
-/* ── POKÉDEX DETAILS PANEL (RIGHT) ────────────────────────────────────────── */
+/* ── 5. POKÉDEX PANEL (unchanged, but ensure it sits above everything) ──── */
 .pokedex-panel {
-  width: 40%;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  width: 35%;
+  height: calc(100% - 60px);
   background: #262626;
-  padding: 1.5rem;
-  position: relative;
-  transform: translateX(100%); /* hidden off-screen right */
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  overflow-y: auto;
-  color: #F5F5F5;
-  z-index: 30;
+  box-shadow: -4px 0 8px rgba(0,0,0,0.4);
+  transform: translateX(100%);  /* hidden off-screen initially */
+  transition: transform 0.3s ease;
+  z-index: 100;
 }
-
-/* When we remove .hidden, panel slides in */
 .pokedex-panel.visible {
   transform: translateX(0);
-  opacity: 1;
 }
 
-/* Close button (top-right of panel) */
-.close-btn {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: #FFF;
-  cursor: pointer;
-}
-
-/* Panel contents */
-.pokemon-sprite img {
-  width: 80px;
-  height: auto;
-  display: block;
-  margin-bottom: 1rem;
-}
-
-.pokedex-panel h2 {
-  font-family: "Press Start 2P", cursive;
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-  color: #FFE255;
-}
-
-.flavor-text {
-  font-size: 0.9rem;
-  margin-bottom: 1rem;
-  line-height: 1.4;
-}
-
-/* Stats table styling */
-.stats-table table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1rem;
-}
-.stats-table th,
-.stats-table td {
-  border: 1px solid #444;
-  padding: 0.5rem;
-  text-align: left;
-}
-.stats-table th {
-  background: #333;
-  color: #FFE255;
-}
-.stats-table td {
-  background: #2E2E2E;
-  color: #F5F5F5;
-}
-
-/* Tech radar container */
-.tech-radar {
-  display: flex;
-  gap: 1rem;
-}
-#radar-chart {
-  background: #1E1E1E;
-  border-radius: 50%;
-}
-#radar-legend {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-#radar-legend li {
-  font-size: 0.8rem;
-  margin-bottom: 0.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-#radar-legend .legend-color {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-
-/* ── HIDE PANEL BY DEFAULT ─────────────────────────────────────────────────── */
-.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* ── SCROLLBAR FOR PANEL ───────────────────────────────────────────────────── */
-.pokedex-panel::-webkit-scrollbar {
-  width: 6px;
-}
-.pokedex-panel::-webkit-scrollbar-thumb {
-  background: #555;
-  border-radius: 3px;
-}
-
-/* ── RESPONSIVE (below 768px) ──────────────────────────────────────────────── */
+/* ── 6. RESPONSIVE (mobile) ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .wrapper {
-    flex-direction: column;
-  }
-  .ee-dex-grid {
-    width: 100%;
-    height: 50vh;
-    overflow-y: scroll;
+  #universe {
+    top: 60px; bottom: 0;
   }
   .pokedex-panel {
     width: 100%;
     height: 50vh;
-    transform: translateY(100%); /* slide up/down on mobile instead */
+    bottom: 0;
+    right: 0;
+    transform: translateY(100%);
   }
   .pokedex-panel.visible {
     transform: translateY(0);

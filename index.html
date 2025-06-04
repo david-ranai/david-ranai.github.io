@@ -3,81 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>David’s EE Dex</title>
+  <title>David’s EE Dex (Cosmology Edition)</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <!-- ─── NAVBAR (optional) ──────────────────────────────────────────────────── -->
+  <!-- ─── NAVBAR (unchanged) ──────────────────────────────────────────── -->
   <nav class="navbar">
-    <div class="logo">EE Dex</div>
+    <div class="logo">EE Universe</div>
     <ul class="nav-links">
       <li><a href="#projects">Projects</a></li>
       <li><a href="#about">About</a></li>
     </ul>
   </nav>
 
-  <!-- ─── MAIN CONTENT ───────────────────────────────────────────────────────── -->
-  <main class="wrapper">
-    <!-- ─── LEFT: EE Dex Grid of Poké Ball Cards ──────────────────────────────── -->
+  <!-- ─── UNIVERSE WRAPPER (starfield + planets + rocket + debris) ──────── -->
+  <main id="universe">
+
+    <!-- ◉ 1) STARFIELD BACKGROUND (set via CSS) -->
+
+    <!-- ◉ 2) PLANETS (each planet = your project-card) -->
     <section id="projects" class="ee-dex-grid">
-      
-      <!-- ▼▼▼ Example Project Card ▼▼▼ -->
-      <div class="project-card" data-project-id="led-blinker">
-        <div class="pokeball">
-          <div class="pokeball-top"></div>
-          <div class="pokeball-bottom"></div>
-          <div class="pokeball-center"></div>
-        </div>
-        <!-- inside this hidden details you can place your thumbnail if you want -->
-        <div class="project-thumb">
-          <img src="images/blinking-led-thumbnail.png" alt="Blinking LED" />
+      <!-- ▼▼▼ Example Planet / Project Card ▼▼▼ -->
+      <div class="planet" data-x="15" data-y="20" data-project-id="led-blinker">
+        <div class="project-card">
+          <div class="pokeball">
+            <div class="pokeball-top"></div>
+            <div class="pokeball-bottom"></div>
+            <div class="pokeball-center"></div>
+          </div>
+          <div class="project-thumb">
+            <img src="images/blinking-led-thumbnail.png" alt="Blinking LED" />
+          </div>
         </div>
       </div>
-      <!-- ▲▲▲ End Example Project Card ▲▲▲ -->
+      <!-- ▲▲▲ End Example Planet ▲▲▲ -->
 
-      <!-- ...copy/paste more .project-card blocks for each project... -->
+      <!-- …copy/paste more .planet blocks with different data-x / data-y … -->
+      <!-- data-x and data-y are percentage positions (0–100) of the “Universe” container -->
+      <!-- e.g. data-x="50" data-y="60" → planet at center horizontally, 60% down vertically. -->
+
     </section>
 
-    <!-- ─── RIGHT: Pokédex Details Panel (hidden by default) ─────────────────── -->
-    <aside id="pokedex-panel" class="pokedex-panel hidden">
-      <button id="close-panel" class="close-btn">×</button>
-      <div class="pokemon-sprite">
-        <!-- e.g. your Pikachu mascot SVG or PNG -->
-        <img src="images/safety-goggles-pikachu.png" alt="Pikachu" />
-      </div>
-      <h2 id="proj-name">Project Name</h2>
-      <p id="proj-flavor" class="flavor-text">
-        Flavor text about this EE project goes here.
-      </p>
+    <!-- ◉ 3) ROCKET (follows cursor) -->
+    <img id="rocket" src="images/rocket.png" alt="Rocketship" />
 
-      <div class="stats-table">
-        <table>
-          <tr>
-            <th>Voltage (V)</th>
-            <td id="stat-voltage">—</td>
-          </tr>
-          <tr>
-            <th>Current (I)</th>
-            <td id="stat-current">—</td>
-          </tr>
-          <tr>
-            <th>Type</th>
-            <td id="stat-type">—</td>
-          </tr>
-        </table>
-      </div>
+    <!-- ◉ 4) RANDOM DEBRIS (floating bits) -->
+    <!-- We’ll create several copies; adjust quantity as desired -->
+    <div class="debris" data-speed="1" data-rotate="5"></div>
+    <div class="debris" data-speed="0.6" data-rotate="-3"></div>
+    <div class="debris" data-speed="1.2" data-rotate="2"></div>
+    <div class="debris" data-speed="0.8" data-rotate="-4"></div>
+    <div class="debris" data-speed="1.5" data-rotate="6"></div>
+    <!-- …add as many .debris elements as you like… -->
 
-      <div class="tech-radar">
-        <!-- Example SVG pie chart placeholders—see section 4 below for details -->
-        <svg id="radar-chart" width="200" height="200" viewBox="0 0 200 200">
-          <!-- we'll draw arcs dynamically in JS -->
-        </svg>
-        <ul id="radar-legend">
-          <!-- dynamically fill legend items -->
-        </ul>
-      </div>
-    </aside>
   </main>
+
+  <!-- ─── POKÉDEX DETAILS PANEL (unchanged from before) ──────────────── -->
+  <aside id="pokedex-panel" class="pokedex-panel hidden">
+    <button id="close-panel" class="close-btn">×</button>
+    <div class="pokemon-sprite">
+      <img src="images/safety-goggles-pikachu.png" alt="Pikachu" />
+    </div>
+    <h2 id="proj-name">Project Name</h2>
+    <p id="proj-flavor" class="flavor-text">Flavor text…</p>
+    <div class="stats-table">
+      <table>
+        <tr><th>Voltage (V)</th><td id="stat-voltage">—</td></tr>
+        <tr><th>Current (I)</th><td id="stat-current">—</td></tr>
+        <tr><th>Type</th><td id="stat-type">—</td></tr>
+      </table>
+    </div>
+    <div class="tech-radar">
+      <svg id="radar-chart" width="200" height="200" viewBox="0 0 200 200"></svg>
+      <ul id="radar-legend"></ul>
+    </div>
+  </aside>
 
   <script src="js/script.js"></script>
 </body>
