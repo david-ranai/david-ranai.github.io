@@ -2,83 +2,82 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  />
-  <title>David Ranai – Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>David’s EE Dex</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <!-- NAVBAR -->
+  <!-- ─── NAVBAR (optional) ──────────────────────────────────────────────────── -->
   <nav class="navbar">
-    <div class="logo">David Ranai</div>
+    <div class="logo">EE Dex</div>
     <ul class="nav-links">
-      <li><a href="#about">About</a></li>
       <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#about">About</a></li>
     </ul>
   </nav>
 
-  <!-- HERO / LANDING SECTION -->
-  <header class="hero" id="hero">
-    <div class="hero-content">
-      <h1>Hi, I’m David Ranai</h1>
-      <p>Frontend Developer • JavaScript Enthusiast • Problem Solver</p>
-    </div>
-    <!-- This div will move slightly based on cursor -->
-    <div class="hero-overlay"></div>
-  </header>
+  <!-- ─── MAIN CONTENT ───────────────────────────────────────────────────────── -->
+  <main class="wrapper">
+    <!-- ─── LEFT: EE Dex Grid of Poké Ball Cards ──────────────────────────────── -->
+    <section id="projects" class="ee-dex-grid">
+      
+      <!-- ▼▼▼ Example Project Card ▼▼▼ -->
+      <div class="project-card" data-project-id="led-blinker">
+        <div class="pokeball">
+          <div class="pokeball-top"></div>
+          <div class="pokeball-bottom"></div>
+          <div class="pokeball-center"></div>
+        </div>
+        <!-- inside this hidden details you can place your thumbnail if you want -->
+        <div class="project-thumb">
+          <img src="images/blinking-led-thumbnail.png" alt="Blinking LED" />
+        </div>
+      </div>
+      <!-- ▲▲▲ End Example Project Card ▲▲▲ -->
 
-  <!-- ABOUT SECTION -->
-  <section id="about" class="section content-wrapper">
-    <h2>About Me</h2>
-    <p>
-      I’m a software engineer who builds clean, interactive web experiences.
-      I love turning ideas into reality using HTML, CSS, and JS. When I’m
-      not coding, you can find me hiking or reading about design systems.
-    </p>
-  </section>
+      <!-- ...copy/paste more .project-card blocks for each project... -->
+    </section>
 
-  <!-- PROJECTS SECTION -->
-  <section id="projects" class="section content-wrapper">
-    <h2>Projects</h2>
-    <div class="projects-grid">
-      <!-- Example project card -->
-      <div class="project-card">
-        <img
-          src="https://via.placeholder.com/300x200"
-          alt="Project screenshot"
-        />
-        <h3>Project Title</h3>
-        <p>Short description of what the project does.</p>
-        <a
-          href="https://github.com/david-ranai/project-repo"
-          target="_blank"
-          >View on GitHub →</a
-        >
+    <!-- ─── RIGHT: Pokédex Details Panel (hidden by default) ─────────────────── -->
+    <aside id="pokedex-panel" class="pokedex-panel hidden">
+      <button id="close-panel" class="close-btn">×</button>
+      <div class="pokemon-sprite">
+        <!-- e.g. your Pikachu mascot SVG or PNG -->
+        <img src="images/safety-goggles-pikachu.png" alt="Pikachu" />
+      </div>
+      <h2 id="proj-name">Project Name</h2>
+      <p id="proj-flavor" class="flavor-text">
+        Flavor text about this EE project goes here.
+      </p>
+
+      <div class="stats-table">
+        <table>
+          <tr>
+            <th>Voltage (V)</th>
+            <td id="stat-voltage">—</td>
+          </tr>
+          <tr>
+            <th>Current (I)</th>
+            <td id="stat-current">—</td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td id="stat-type">—</td>
+          </tr>
+        </table>
       </div>
 
-      <!-- Copy/paste more project cards as needed, updating the href to your repo names -->
-    </div>
-  </section>
-
-  <!-- CONTACT SECTION -->
-  <section id="contact" class="section content-wrapper">
-    <h2>Contact</h2>
-    <p>
-      Feel free to reach out:
-      <a href="mailto:your.email@example.com">your.email@example.com</a>
-    </p>
-    <p>
-      Or find me on
-      <a href="https://www.linkedin.com/in/david-ranai" target="_blank"
-        >LinkedIn</a
-      >
-      •
-      <a href="https://github.com/david-ranai" target="_blank">GitHub</a>
-    </p>
-  </section>
+      <div class="tech-radar">
+        <!-- Example SVG pie chart placeholders—see section 4 below for details -->
+        <svg id="radar-chart" width="200" height="200" viewBox="0 0 200 200">
+          <!-- we'll draw arcs dynamically in JS -->
+        </svg>
+        <ul id="radar-legend">
+          <!-- dynamically fill legend items -->
+        </ul>
+      </div>
+    </aside>
+  </main>
 
   <script src="js/script.js"></script>
 </body>
