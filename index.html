@@ -3,81 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>David’s EE Dex (Cosmology Edition)</title>
+  <title>David Ranai • EE Universe</title>
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <!-- ─── NAVBAR (unchanged) ──────────────────────────────────────────── -->
+  <!-- ─── NAVBAR ─────────────────────────────────────────────────────────────── -->
   <nav class="navbar">
     <div class="logo">EE Universe</div>
     <ul class="nav-links">
+      <li><a href="#">Home</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#about">About</a></li>
     </ul>
   </nav>
 
-  <!-- ─── UNIVERSE WRAPPER (starfield + planets + rocket + debris) ──────── -->
+  <!-- ─── STARFIELD “UNIVERSE” WRAPPER ──────────────────────────────────────── -->
   <main id="universe">
+    <!-- 1) STARFIELD BACKGROUND is handled purely in CSS on #universe -->
 
-    <!-- ◉ 1) STARFIELD BACKGROUND (set via CSS) -->
-
-    <!-- ◉ 2) PLANETS (each planet = your project-card) -->
-    <section id="projects" class="ee-dex-grid">
-      <!-- ▼▼▼ Example Planet / Project Card ▼▼▼ -->
-      <div class="planet" data-x="15" data-y="20" data-project-id="led-blinker">
-        <div class="project-card">
-          <div class="pokeball">
-            <div class="pokeball-top"></div>
-            <div class="pokeball-bottom"></div>
-            <div class="pokeball-center"></div>
-          </div>
-          <div class="project-thumb">
-            <img src="images/blinking-led-thumbnail.png" alt="Blinking LED" />
-          </div>
+    <!-- 2) PLANETS: each project is a “planet” circle at some (x%, y%) -->
+    <section id="projects" class="ee‐planets">
+      <!-- Example planet: LED Blinker -->
+      <div class="planet" data-x="20" data-y="30" data-name="Blinking LED Driver" data-desc="A 555-timer LED blinker running at 1 Hz, current-limiting resistor set for 20 mA." data-link="https://github.com/david-ranai/led-blinker">
+        <img src="images/planet‐led.png" alt="LED Blinker" class="planet-img" />
+        <div class="planet-overlay">
+          <h3>Blinking LED Driver</h3>
+          <p>A 555-timer LED blinker running at 1 Hz, 20 mA current.</p>
+          <a href="https://github.com/david-ranai/led-blinker" target="_blank">View on GitHub →</a>
         </div>
       </div>
-      <!-- ▲▲▲ End Example Planet ▲▲▲ -->
 
-      <!-- …copy/paste more .planet blocks with different data-x / data-y … -->
-      <!-- data-x and data-y are percentage positions (0–100) of the “Universe” container -->
-      <!-- e.g. data-x="50" data-y="60" → planet at center horizontally, 60% down vertically. -->
+      <!-- Example planet: Audio Filter -->
+      <div class="planet" data-x="60" data-y="40" data-name="Audio DSP Filter" data-desc="Designed a 4th-order Butterworth filter in MATLAB and ported it to C for real-time DSP." data-link="https://github.com/david-ranai/audio-filter">
+        <img src="images/planet‐filter.png" alt="Audio Filter" class="planet-img" />
+        <div class="planet-overlay">
+          <h3>Audio DSP Filter</h3>
+          <p>4th-order Butterworth filter ported from MATLAB to C for real-time use.</p>
+          <a href="https://github.com/david-ranai/audio-filter" target="_blank">View on GitHub →</a>
+        </div>
+      </div>
 
+      <!-- Add more .planet blocks for each EE project you have -->
     </section>
 
-    <!-- ◉ 3) ROCKET (follows cursor) -->
+    <!-- 3) ROCKET: follows the cursor -->
     <img id="rocket" src="images/rocket.png" alt="Rocketship" />
 
-    <!-- ◉ 4) RANDOM DEBRIS (floating bits) -->
-    <!-- We’ll create several copies; adjust quantity as desired -->
-    <div class="debris" data-speed="1" data-rotate="5"></div>
-    <div class="debris" data-speed="0.6" data-rotate="-3"></div>
-    <div class="debris" data-speed="1.2" data-rotate="2"></div>
-    <div class="debris" data-speed="0.8" data-rotate="-4"></div>
-    <div class="debris" data-speed="1.5" data-rotate="6"></div>
-    <!-- …add as many .debris elements as you like… -->
-
+    <!-- 4) DEBRIS: multiple drift/spin items -->
+    <div class="debris"></div>
+    <div class="debris"></div>
+    <div class="debris"></div>
+    <div class="debris"></div>
+    <div class="debris"></div>
+    <!-- Add as many <div class="debris"></div> as you like -->
   </main>
 
-  <!-- ─── POKÉDEX DETAILS PANEL (unchanged from before) ──────────────── -->
-  <aside id="pokedex-panel" class="pokedex-panel hidden">
-    <button id="close-panel" class="close-btn">×</button>
-    <div class="pokemon-sprite">
-      <img src="images/safety-goggles-pikachu.png" alt="Pikachu" />
-    </div>
-    <h2 id="proj-name">Project Name</h2>
-    <p id="proj-flavor" class="flavor-text">Flavor text…</p>
-    <div class="stats-table">
-      <table>
-        <tr><th>Voltage (V)</th><td id="stat-voltage">—</td></tr>
-        <tr><th>Current (I)</th><td id="stat-current">—</td></tr>
-        <tr><th>Type</th><td id="stat-type">—</td></tr>
-      </table>
-    </div>
-    <div class="tech-radar">
-      <svg id="radar-chart" width="200" height="200" viewBox="0 0 200 200"></svg>
-      <ul id="radar-legend"></ul>
-    </div>
-  </aside>
+  <!-- ─── SIMPLE ABOUT SECTION (triggered by nav) ──────────────────────────── -->
+  <section id="about" class="section content">
+    <h2>About Me</h2>
+    <p>
+      I’m David Ranai, an Electrical Engineer specializing in embedded systems and signal processing. I build circuits, write firmware, and love exploring the cosmos—both literally and figuratively.
+    </p>
+  </section>
 
   <script src="js/script.js"></script>
 </body>
