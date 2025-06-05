@@ -1,4 +1,4 @@
-/* ── RESET & BASE STYLES ───────────────────────────────────────────────────── */
+/* ── RESET & BASE ───────────────────────────────────────────────────────── */
 * {
   margin: 0;
   padding: 0;
@@ -9,16 +9,13 @@ html {
 }
 body {
   font-family: "Open Sans", sans-serif;
-  background: #000; /* fallback black */
+  background: #000; /* fallback if no starfield */
   color: #EFEFEF;
   overflow-x: hidden;
 }
 a {
-  color: #39ff14; /* neon green accent */
+  color: #39ff14; /* neon‐green accent */
   text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
 }
 
 /* ── NAVBAR ───────────────────────────────────────────────────────────────── */
@@ -33,12 +30,11 @@ a:hover {
   align-items: center;
   padding: 0.75rem 2rem;
   z-index: 100;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
 }
 .navbar .logo {
   font-size: 1.25rem;
   font-weight: bold;
-  color: #39ff14; /* neon green */
+  color: #39ff14;
 }
 .nav-links {
   list-style: none;
@@ -55,28 +51,28 @@ a:hover {
   color: #39ff14;
 }
 
-/* ── UNIVERSE / STARFIELD (fills from below navbar) ───────────────────────── */
+/* ── UNIVERSE / STARFIELD (fills under the navbar) ───────────────────────── */
 #universe {
   position: absolute;
-  top: 60px; /* match navbar height + margin */
+  top: 60px;       /* enough to clear the navbar (navbar ≈ 60px height) */
   left: 0;
   right: 0;
   bottom: 0;
   overflow: hidden;
-  /* You can swap out the URL with a darker, higher-res starfield if you like */
   background: #000 url("https://i.imgur.com/9kG7Q3h.png") center/cover no-repeat;
+  /* Replace the URL with any starfield image you prefer */
 }
 
-/* ── PLANETS LAYOUT & STYLE ────────────────────────────────────────────────── */
+/* ── PLANETS ───────────────────────────────────────────────────────────────── */
 .ee-planets {
-  position: relative; /* planets are absolutely positioned inside this */
+  position: relative; /* planets will be absolutely positioned inside here */
   width: 100%;
   height: 100%;
 }
 
 .planet {
   position: absolute;
-  width: 100px;
+  width: 100px;   /* planet image is 100×100 px */
   height: 100px;
   transform: translate(-50%, -50%);
   cursor: pointer;
@@ -86,88 +82,63 @@ a:hover {
   transform: translate(-50%, -50%) scale(1.1);
 }
 
-/* The planet image (circular PNG or SVG) */
 .planet-img {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(57, 255, 20, 0.6); /* neon green glow */
+  box-shadow: 0 0 8px rgba(57, 255, 20, 0.6); /* small neon-green glow */
 }
 
-/* Overlay that appears on hover */
-.planet-overlay {
+/* Optional tooltip on hover showing project name */
+.planet::after {
+  content: attr(data-name);
   position: absolute;
-  top: 110%;
+  top: -1.5rem;
   left: 50%;
   transform: translateX(-50%);
-  width: 180px;
-  background: rgba(10, 10, 30, 0.95);
-  border: 2px solid #39ff14;
-  border-radius: 8px;
-  padding: 0.75rem;
+  background: rgba(10, 10, 30, 0.9);
+  color: #39ff14;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
-  z-index: 20;
+  transition: opacity 0.15s ease;
 }
-.planet:hover .planet-overlay {
+.planet:hover::after {
   opacity: 1;
-  pointer-events: auto;
-}
-.planet-overlay h3 {
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
-  color: #39ff14;
-}
-.planet-overlay p {
-  font-size: 0.8rem;
-  margin-bottom: 0.5rem;
-  color: #EFEFEF;
-}
-.planet-overlay a {
-  font-size: 0.8rem;
-  font-weight: 600;
-  display: inline-block;
-  color: #39ff14;
 }
 
 /* ── ROCKET (cursor follower) ─────────────────────────────────────────────── */
 #rocket {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 60px;
-  pointer-events: none; /* so clicks pass through */
+  width: 60px;   /* rocket image is 60×60 px */
+  height: 60px;
+  pointer-events: none; /* so it never blocks clicks */
   transform: translate(-50%, -50%) rotate(0deg);
   transition: transform 0.1s ease-out;
   z-index: 150;
 }
 
-/* ── SPACE DEBRIS (floating & spinning) ───────────────────────────────────── */
-.debris {
+/* ── ROCKET SHADOW (ellipse under rocket when landed) ─────────────────────── */
+#rocket-shadow {
   position: absolute;
-  width: 40px;
-  height: 40px;
-  background: url("images/debris.png") center/cover no-repeat;
-  opacity: 0.8;
+  width: 60px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  filter: blur(4px);
+  opacity: 0;
   pointer-events: none;
-  z-index: 10;
-  /* We’ll set drift & spin durations in JS */
-  animation: drift linear infinite, spin linear infinite;
-}
-@keyframes drift {
-  from { transform: translateY(0px); }
-  to   { transform: translateY(200px); }
-}
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
+  z-index: 140;
+  transform: translate(-50%, -50%) scale(1);
+  transition: opacity 0.1s ease;
 }
 
-/* ── “ABOUT” SECTION (below the universe) ───────────────────────────────── */
+/* ── ABOUT SECTION (below the universe) ──────────────────────────────────── */
 .section.content {
-  margin-top: calc(60px + 100vh); /* push below #universe */
+  margin-top: calc(60px + 100vh); /* push below the universe area */
   padding: 3rem 2rem;
   background: #0A0A1E;
   color: #EFEFEF;
@@ -185,9 +156,19 @@ a:hover {
   margin: 0 auto;
 }
 
-/* ── RESPONSIVE ADJUSTMENTS ──────────────────────────────────────────────── */
+/* ── RESPONSIVE ───────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .nav-links {
-    display: none;
+  .planet {
+    width: 80px;
+    height: 80px;
+  }
+  #rocket {
+    width: 50px;
+    height: 50px;
+  }
+  #rocket-shadow {
+    width: 50px;
+    height: 15px;
+    filter: blur(3px);
   }
 }
